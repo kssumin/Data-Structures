@@ -8,14 +8,17 @@ Purpose: Implementing the required functions for Question 1 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// Node는 값과 다음 Node를 가리키는 포인터를 가지고 있다.
 typedef struct _listnode{
 	int item;
 	struct _listnode *next;
 } ListNode;			// You should not change the definition of ListNode
 
+// LinkedList는 head인 Node와 size를 가지고 있다.
 typedef struct _linkedlist{
 	int size;
 	ListNode *head;
@@ -26,7 +29,6 @@ typedef struct _linkedlist{
 
 //You should not change the prototype of this function
 int insertSortedLL(LinkedList *ll, int item);
-
 void printList(LinkedList *ll);
 void removeAllItems(LinkedList *ll);
 ListNode *findNode(LinkedList *ll, int index);
@@ -90,7 +92,54 @@ int main()
 
 int insertSortedLL(LinkedList *ll, int item)
 {
-	/* add your code here */
+	ListNode *cur, *pre;
+	int count=0;
+
+	if (ll==NULL)
+	{
+		return -1;
+	}
+
+	cur=ll->head;
+
+	// 첫 번째 노드로 삽입한다
+	if(cur==NULL)
+	{
+		insertNode(ll, 0, item);
+		return 0;
+	}
+
+	// 첫 번째 노드가 있을 때
+	while (cur !=NULL)
+	{
+		// 노드가 겹친다
+		if (cur->item == item)
+		{	
+			return -1;
+		}
+
+		// 삽입하고자 하는 값이 더 크다
+		if (cur -> item < item)
+		{	
+			count=count+1;
+			// 삽입하고자 하는 값을 해당 노드의 다음 값으로 넣는다
+			if (cur -> next ==NULL)
+			{
+				insertNode(ll, count, item);
+				return count;
+			}
+
+			// 현 노드의 다음 노드로 이동한다.
+			cur = cur->next;
+		}
+
+		// 현 노드의 값이 더 크다
+		if (cur -> item > item)
+		{	
+			insertNode(ll, count, item);
+			return count;
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
