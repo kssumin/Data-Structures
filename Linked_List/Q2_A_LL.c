@@ -103,7 +103,40 @@ int main()
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 {
-    /* add your code here */
+	ListNode *pre1, *pre2, *temp1, *temp2;
+
+	if (ll1==NULL || ll2 ==NULL)
+	{
+		return;
+	}
+
+	pre1 = ll1->head;
+	pre2 = ll2->head;
+
+	if (pre1==NULL || pre2 ==NULL)
+	{
+		return;
+	}
+
+	while(pre1!=NULL)
+	{	
+		// 2번째 리스트가 가리키는 값이 없다면 멈춘다.
+		if (pre2== NULL)
+		{
+			return;
+		}
+
+		temp1 = pre1 -> next;
+		temp2 = pre2 -> next;
+
+		// 1번째 리스트의 다음 노드를 2번째 리스트를 가리키도록 한다
+		pre1 -> next = pre2;
+		pre2 -> next = temp1;
+
+		pre1 = temp1;
+		pre2 = temp2;
+		ll2 -> head = temp2;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
