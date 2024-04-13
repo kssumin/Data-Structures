@@ -8,6 +8,7 @@ Purpose: Implementing the required functions for Question 6 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#define max(x, y) (x) > (y) ? (x) : (y) 
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +89,65 @@ int main()
 
 int moveMaxToFront(ListNode **ptrHead)
 {
-    /* add your code here */
+	ListNode *cur, *head, *post;
+	ListNode *prev=NULL, *temp = NULL;
+
+	if(ptrHead == NULL || *ptrHead ==NULL)
+	{
+		return -1;
+	}
+
+	// head를 가리키는 포인터
+	head = *ptrHead;
+
+	cur = head;
+	int max = 0;
+
+	
+	// 노드의 끝까지 찾음
+	while(cur!=NULL)
+	{	
+		// 현 노드가 제일 큰 값이라면
+		if (max < cur->item)
+		{	
+
+			max = cur -> item;
+			prev = temp;
+			
+			// 다음 노드로 현 노드의 다음을 저장한다
+			post = cur -> next;
+		}
+
+		// 현 노드가 가장 큰 값이 아니라면
+
+		// 다음 노드로 움직이기 전에 이전 노드를 가리키는 포인터를 저장한다
+		temp = cur; 
+
+		// 다음 노드로 움직인다
+		cur = cur -> next;
+	}
+
+
+	// 가장 큰 값이 head라면
+	if (prev == NULL)
+	{	
+		return 0;
+	}
+	
+	// 가장 큰 값이 head가 아니라 중간 값이라면
+	else
+	{	
+		// 가장 큰 값
+		cur = prev -> next;
+
+		// 큰 노드의 이전 노드가 큰 노드의 다음 노드를 가리키도록 변경
+		prev -> next = post;
+
+		temp = head;
+		*ptrHead = cur;
+
+		(*ptrHead)-> next = temp;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
