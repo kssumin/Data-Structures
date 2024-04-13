@@ -85,8 +85,84 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 void moveOddItemsToBack(LinkedList *ll)
-{
-	/* add your code here */
+{	
+	ListNode *pre, *cur;
+	int * oddNumbers;
+
+	oddNumbers = (int*)malloc(5*sizeof(int));
+	int realSize=0;
+
+	
+	if (ll ==NULL)
+	{
+		return;
+	}
+
+	pre = ll -> head;
+	cur = pre;
+	
+	if(cur ==NULL)
+	{
+		return;
+	}
+
+
+	while(cur !=NULL)
+	{	
+		// 짝수이면 그대로 둔다
+		if (cur->item % 2==0)
+		{
+			pre = cur;
+			cur = cur -> next;
+			
+			continue;
+		}
+
+		// 홀수면 뒤로 뺀다
+		else
+		{	
+			realSize+=1;
+
+			// 맨 앞 노드일 때 처리를 한다
+			if (cur == ll->head)
+			{	
+				oddNumbers[realSize-1]=cur -> item;
+
+				// 현 노드를 다음 노드로 움직인다
+				cur = cur -> next;
+				pre -> next = cur;
+
+				// 리스트의 head를 다음 노드로 변경한다
+				ll->head = cur;
+
+				ll->size-=1;
+
+				continue;
+			}
+
+			if (realSize%5==0)
+			{	
+				int multi = realSize/2;
+				oddNumbers = (int*)realloc(oddNumbers, sizeof(int)*multi);
+			}
+
+			oddNumbers[realSize-1]=cur -> item;
+
+			// 다음 노드로 움직인다
+			cur = cur -> next;
+
+			// 이전 노드는 현 노드를 가리키지 않고 다음 노드를 가리킨다
+			pre -> next = cur;
+
+			// 리스트의 사이즈를 줄인다
+			ll-> size -=1;
+		}
+	}
+
+	for(int i=0;i<realSize;i++)
+	{	
+		insertNode(ll, (ll -> size), oddNumbers[i]);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
