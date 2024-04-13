@@ -116,25 +116,77 @@ int main()
 
 void createQueueFromLinkedList(LinkedList *ll, Queue *q)
 {
-	/* add your code here */
+	ListNode *temp;
+	
+	temp = ll->head;
+
+	if (temp ==NULL)
+	{
+		return;
+	}
+
+	enqueue(q, temp->item);
+	temp = temp -> next;
+
+	while(temp!=NULL)
+	{	
+		enqueue(q, temp -> item);
+		temp = temp -> next;
+	}
 }
 
 void removeOddValues(Queue *q)
 {
-	/* add your code here */
+	ListNode *temp;
+	LinkedList *list;
+
+	int index=0;
+	list = &(q->ll);
+	temp = list -> head;
+
+	if (temp ==NULL)
+	{
+		return;
+	}
+
+	while(temp!=NULL)
+	{		
+		// 홀수라면
+		// 노드를 제거한다
+		// 따라서 다음 노드의 인덱스는 변하지 않는다
+		if (temp->item % 2!=0)
+		{	
+			temp = temp -> next;
+			removeNode(list, index);
+		}
+
+		// 짝수라면
+		// 인덱스 값을 변경시켜준다
+		else
+		{
+			index++;
+			temp = temp -> next;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// 마지막 노드에 아이템을 삽입한다
 void enqueue(Queue *q, int item) {
+
 	insertNode(&(q->ll), q->ll.size, item);
 }
 
+// 첫 번째 노드의 값을 삭제하고 해당 노드의 값을 반환한다
 int dequeue(Queue *q) {
 	int item;
 
 	if (!isEmptyQueue(q)) {
+		// 첫 번째 노드의 아이템
 		item = ((q->ll).head)->item;
+
+		// 첫 번째 노드의 값을 삭제한다
 		removeNode(&(q->ll), 0);
 		return item;
 	}
@@ -177,13 +229,19 @@ void printList(LinkedList *ll){
 
 
 void removeAllItems(LinkedList *ll)
-{
+{	
+	// 현재 위치한 노드를 삭제한다
 	ListNode *cur = ll->head;
 	ListNode *tmp;
 
 	while (cur != NULL){
+		// 다음 노드를 가리킨다
 		tmp = cur->next;
+
+		// 현재 위치한 노드를 삭제한다
 		free(cur);
+
+		// 현재 위치한 노드를 다음 노드로 바꾼다.
 		cur = tmp;
 	}
 	ll->head = NULL;
@@ -197,19 +255,22 @@ ListNode * findNode(LinkedList *ll, int index){
 
 	if (ll == NULL || index < 0 || index >= ll->size)
 		return NULL;
-
+	
 	temp = ll->head;
 
 	if (temp == NULL || index < 0)
 		return NULL;
 
+	// 두 번째 노드부터 들어간다
 	while (index > 0){
+		// 다음 노드로 이동
 		temp = temp->next;
 		if (temp == NULL)
 			return NULL;
 		index--;
 	}
 
+	// 첫 번째 노드는 바로 반환한다
 	return temp;
 }
 
@@ -220,32 +281,42 @@ int insertNode(LinkedList *ll, int index, int value){
 	if (ll == NULL || index < 0 || index > ll->size + 1)
 		return -1;
 
-	// If empty list or inserting first node, need to update head pointer
+	// 첫 번쨰 노드이다
 	if (ll->head == NULL || index == 0){
 		cur = ll->head;
+
+		// 헤드에 메모리를 할당한다
 		ll->head = malloc(sizeof(ListNode));
 		if (ll->head == NULL)
 		{
 			exit(0);
 		}
+
 		ll->head->item = value;
 		ll->head->next = cur;
 		ll->size++;
 		return 0;
 	}
 
-
-	// Find the nodes before and at the target position
-	// Create a new node and reconnect the links
+	// 삽입하고자 하는 노드의 이전 노드를 찾는다
 	if ((pre = findNode(ll, index - 1)) != NULL){
+
+		// 삽입하고자 하는 위치에 있는 노드
 		cur = pre->next;
+
+		// 이전 노드 이후에 메모리를 할당한다
 		pre->next = malloc(sizeof(ListNode));
 		if (pre->next == NULL)
 		{
 			exit(0);
 		}
+
+		// 이전 노드의 다음 노드(우리가 삽입하고자 하는 위치)에 값을 할당한다
 		pre->next->item = value;
+
+		// 이전 노드의 다음 노드(우리가 값을 삽입)한 노드의 다음 노드로 원래 있던 노드를 할당한다
 		pre->next->next = cur;
+
 		ll->size++;
 		return 0;
 	}
@@ -262,10 +333,15 @@ int removeNode(LinkedList *ll, int index){
 	if (ll == NULL || index < 0 || index >= ll->size)
 		return -1;
 
-	// If removing first node, need to update head pointer
+	// 첫 번째 노드를 삭제한다
 	if (index == 0){
+		// 삭제하고자 하는 노드의 다음 노드
 		cur = ll->head->next;
+
+		// 첫 번째 노드 메모리 할당 해제
 		free(ll->head);
+
+		// 첫 번째 노드를 삭제하고자 하는 노드의 다음 노드로 변경
 		ll->head = cur;
 		ll->size--;
 		return 0;
@@ -273,13 +349,19 @@ int removeNode(LinkedList *ll, int index){
 
 	// Find the nodes before and after the target position
 	// Free the target node and reconnect the links
+
+	// 삭제하고자 하는 노드의 이전 노드를 찾는다
 	if ((pre = findNode(ll, index - 1)) != NULL){
 
 		if (pre->next == NULL)
 			return -1;
 
+		// 삭제하고자 하는 노드
 		cur = pre->next;
+
+		// 이전 노드가 삭제하고자 하는 노드의 다음 노드를 가리킨다
 		pre->next = cur->next;
+		// 삭제하고자 하는 노드의 메모리 할당 해제
 		free(cur);
 		ll->size--;
 		return 0;
