@@ -102,8 +102,40 @@ int main()
 /////////////////////////////////////////////////////////////////////////////////
 
 int isStackPairwiseConsecutive(Stack *s)
-{
-  /* add your code here */
+{	
+	LinkedList temp = s->ll;
+	ListNode *node = temp.head;
+
+	int item;
+	int tempItem;
+
+	if (s==NULL || node ==NULL)
+	{
+		return 0;
+	}
+
+	// 스택의 크기가 홀수라면
+	if (temp.size%2!=0)
+	{
+		return 0;
+	}
+
+	while(s->ll.size !=0)
+	{
+		item = pop(s);
+		tempItem = peek(s);
+
+		if (item - tempItem == 1)
+		{
+			pop(s);
+		}
+
+		else
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
