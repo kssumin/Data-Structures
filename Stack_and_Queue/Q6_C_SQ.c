@@ -110,8 +110,23 @@ int main()
 ////////////////////////////////////////////////////////////
 
 void removeUntil(Stack *s, int value)
-{
-/* add your code here */
+{	
+	int item = 0;
+	int count = s->ll.size;
+
+
+	for (size_t i= 0; i < count; i++)
+	{
+		item = peek(s);
+
+		if (item==value)
+		{
+			return;
+		}
+		
+		// 찾고자 하는 아이템이 아닌 경우
+		pop(s);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
