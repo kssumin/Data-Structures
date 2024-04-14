@@ -108,8 +108,17 @@ int main()
 ////////////////////////////////////////////////////////////
 
 void recursiveReverse(Queue *q)
-{
-/* add your code here */
+{	
+	int item = 0;
+	// 큐가 비었다면
+	if(isEmptyQueue(q))
+	{
+		return;
+	}
+
+	item= dequeue(q);
+	recursiveReverse(q);
+	enqueue(q, item);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -142,6 +151,7 @@ void removeAllItems(LinkedList *ll)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// 마지막에 노드를 삽입한다
 void enqueue(Queue *q, int item) {
 	insertNode(&(q->ll), q->ll.size, item);
 }
