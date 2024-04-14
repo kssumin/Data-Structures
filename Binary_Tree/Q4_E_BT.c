@@ -100,10 +100,30 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// 함수는 각 node를 루트 노드로 한 이진 트리에서 홀수들의 합을 반환한다.
 int sumOfOddNodes(BTNode *node)
 
 {
-    /* add your code here */
+    int sum = 0;
+
+    if (node == NULL)
+    {
+        return 0;
+    }
+
+    // 짝수라면
+    if ((node->item) % 2 == 0)
+    {
+        sum=sumOfOddNodes(node->left)+sumOfOddNodes(node->right);
+    }
+
+    // 홀수라면
+    else
+    {
+        sum=sumOfOddNodes(node->left)+sumOfOddNodes(node->right)+(node->item);
+    }
+
+    return sum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
