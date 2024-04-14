@@ -94,10 +94,31 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int maxHeight(BTNode *node)
 
+// 왼쪽과 오른쪽 트리를 비교하여 더 큰 쪽이 반환
+int maxHeight(BTNode *node)
 {
-    /* add your code here */
+    int max;
+
+    if(node==NULL)
+    {
+        return -1;
+    }
+
+    int left = maxHeight(node->left);
+    int right = maxHeight(node->right);
+
+    // 왼쪽 오른쪽 트리 중에 더 트리의 높이가 큰 높이 선택
+    if (left > right) {
+        max = left;
+    } 
+    else {
+        max = right;
+    }
+
+
+    // 자식 트리의 최대 높이에 +1를 더한다(본인 노드)
+    return max +1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
