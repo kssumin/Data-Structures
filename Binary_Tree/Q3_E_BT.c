@@ -33,6 +33,7 @@ typedef struct _stack
 ///////////////////////// function prototypes ////////////////////////////////////
 
 // You should not change the prototypes of these functions
+int existChildNode(BTNode *node);
 int countOneChildNodes(BTNode *node);
 
 BTNode *createBTNode(int item);
@@ -100,8 +101,44 @@ int main()
 
 int countOneChildNodes(BTNode *node)
 
+{   
+    // 자식 노드가 1개인 노드의 개수
+    int count=0;
+
+    // 자식 노드가 없음을 나타냄 
+    if (node ==NULL)
+    {
+        return 0;
+    }
+
+    // 왼쪽 자식노드의 존재유무
+    int left = existChildNode(node->left);
+
+    // 오른쪽 자식노드의 존재유무
+    int right = existChildNode(node->right);
+
+    // 왼쪽 또는 오른쪽 자식만 존재하는 경우에
+    if(left == 1 && right == 0 || left ==0 && right ==1)
+    {
+        count+=countOneChildNodes(node->left)+ countOneChildNodes(node -> right)+1;
+    }
+
+    // 자식 노드들에서 개수를 센다
+    else{
+        count+=countOneChildNodes(node->left)+ countOneChildNodes(node -> right);
+    }
+    
+    return count;
+}
+
+int existChildNode(BTNode *node)
 {
-    /* add your code here */
+    if (node == NULL)
+    {
+        return 0;
+    }
+
+    return 1; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
