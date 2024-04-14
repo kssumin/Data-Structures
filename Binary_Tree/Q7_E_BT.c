@@ -8,7 +8,7 @@ Purpose: Implementing the required functions for Question 7 */
 
 #include <stdio.h>
 #include <stdlib.h>
-
+    
 //////////////////////////////////////////////////////////////////////////////////
 
 typedef struct _btnode
@@ -102,7 +102,36 @@ int main()
 
 int smallestValue(BTNode *node)
 {
-	/* add your code here */
+    int min;
+
+    // leaf 노드라면 해당 노드의 값이 가장 작다
+	if (node->left ==NULL && node->right==NULL)
+    {
+        return node->item;
+    }
+
+    int item = node->item;
+
+    int left = smallestValue(node -> left);
+    int right = smallestValue(node -> right);
+
+    // 왼쪽과 오른쪽 값 비교한다
+    if (left < right)
+    {
+        min = left;
+    }
+    else
+    {
+        min = right;
+    }
+
+    // 왼쪽 트리와 오른쪽 트리 그리고 현 노드의 값을 비교해서 최솟값을 구한다
+    if(item < min)
+    {
+        min = item;
+    }
+    
+    return min;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
