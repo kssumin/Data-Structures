@@ -111,16 +111,34 @@ int main()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void reverse(Queue *q)
-{
-/* add your code here */
+{	
+	Stack stack;
+	stack.ll.head = NULL;
+	stack.ll.size = 0;
+
+	int item = 0;
+
+	while(!isEmptyQueue(q))
+	{
+		item = dequeue(q);
+		push(&stack, item);
+	}
+
+	while(!isEmptyStack(&stack))
+	{	
+		item = pop(&stack);
+		enqueue(q, item);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// 가장 앞에 노드를 추가한다
 void push(Stack *s, int item){
    insertNode(&(s->ll), 0, item);
 }
 
+// 가장 앞 노드의 값을 제거한다
 int pop(Stack *s){
    int item;
    if(!isEmptyStack(s)){
@@ -131,6 +149,7 @@ int pop(Stack *s){
     return INT_MIN;
 }
 
+// 가장 앞 노드의 값을 파악한다
 int peek(Stack *s){
    return ((s->ll).head)->item;
 }
@@ -141,10 +160,12 @@ int isEmptyStack(Stack *s){
    return 0;
 }
 
+// 가장 뒤에 노드를 추가한다
 void enqueue(Queue *q, int item){
    insertNode(&(q->ll), q->ll.size, item);
 }
 
+// 가장 앞 노드를 제거한다
 int dequeue(Queue *q){
    int item;
    item = ((q->ll).head)->item;
