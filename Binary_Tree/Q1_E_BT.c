@@ -114,13 +114,28 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int identical(BTNode *tree1, BTNode *tree2)
-
-{
-   /* add your code here */
+{   
+    // 트리가 둘 두 비어있는 경우 -> 구조적으로 동일하다
+    if (tree1 == NULL && tree2 == NULL)
+        return 1;
+    
+    // 트리의 한 쪽만 비어있는 경우 -> 구조적으로 동일하지 않다
+    if (tree1 == NULL || tree2 == NULL)
+        return 0;
+    
+    // 값이 같지 않다면 -> 구조적으로 동일하지 않다
+    if (tree1->item != tree2->item)
+        return 0;
+    
+    // 왼쪽 노드의 값을 탐색한다
+    identical(tree1 -> left, tree2 -> left);
+    identical(tree1 -> right, tree2 -> right);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
+// 이진 트리 노드를 생성한다
+// 값을 넣고 왼쪽 트리와 오른쪽 트리에는 아무런 노드가 없다
 BTNode *createBTNode(int item){
     BTNode *newNode = malloc(sizeof(BTNode));
     newNode->item = item;
@@ -132,6 +147,7 @@ BTNode *createBTNode(int item){
 //////////////////////////////////////////////////////////////////////////////////
 
 
+// 이진 트리를 생성한다
 BTNode *createTree()
 {
     Stack stk;
@@ -139,14 +155,20 @@ BTNode *createTree()
     char s;
     int item;
 
+    // 이진 트리의 루트 노드 값 초기화
     stk.top = NULL;
     root = NULL;
 
     printf("Input an integer that you want to add to the binary tree. Any Alpha value will be treated as NULL.\n");
     printf("Enter an integer value for the root: ");
+
+    // 이진 트리의 루트 노드에 삽입하고자 하는 숫자
     if(scanf("%d",&item) > 0)
-    {
+    {   
+        // 루트 노드를 생성한다
         root = createBTNode(item);
+
+        // 이진 트리의 루트 노드로 삽입한다
         push(&stk,root);
     }
     else
@@ -154,6 +176,7 @@ BTNode *createTree()
         scanf("%c",&s);
     }
 
+    // 스택에 값이 있을 동안
     while((temp =pop(&stk)) != NULL)
     {
 
@@ -193,40 +216,65 @@ void push( Stack *stk, BTNode *node){
     if(temp == NULL)
         return;
     temp->btnode = node;
+
+    // 다른 최상위 노드가 존재하지 않는다면
     if(stk->top == NULL){
+        // 최상위 노드로 설정한다
         stk->top = temp;
         temp->next = NULL;
     }
+
+    // 다른 최상위 노드가 존재한다면
     else{
+        // 삽입하고자 하는 노드의 다음 노드로 최상위 노드로 설정한다
         temp->next = stk->top;
+
+        // 최상위 노드를 현 삽입하고자 하는 노드로 설정한다
         stk->top = temp;
     }
 }
 
+// 최상위 노드를 삭제한다
 BTNode* pop(Stack *stk){
    StackNode *temp, *top;
    BTNode *ptr;
    ptr = NULL;
 
    top = stk->top;
+
+    // 최상위 노드가 존재한다면
    if(top != NULL){
+
+        // 최상위 노드의 다음 노드
         temp = top->next;
+        // 최상위 노드
         ptr = top->btnode;
 
+        // 최상위 노드를 최상위 노드의 다음 노드로 설정한다
         stk->top = temp;
+
+        // 기존의 최상위 노드 메모리 할당 해제
         free(top);
         top = NULL;
    }
+
+   // 기존의 최상위 노드를 반환
    return ptr;
 }
 
 void printTree(BTNode *node){
     if(node == NULL) return;
 
+    // 가장 왼쪽 노드로 이동한다
     printTree(node->left);
+
+    // 값을 출력한다
     printf("%d ",node->item);
+
+    // 해당 노드의 오른쪽을 탐색한다
     printTree(node->right);
 }
+
 
 void removeAll(BTNode **node){
     if(*node != NULL){
