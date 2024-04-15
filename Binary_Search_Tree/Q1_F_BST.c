@@ -91,10 +91,43 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// 요구사항 : 레벨별로 노드를 출력해야 한다.
 void levelOrderTraversal(BSTNode* root)
 {
+	if (root == NULL)
+    {
+        return ;
+	}
 
-    /* add your code here */
+	Queue *queue = malloc(sizeof(Queue));
+	queue->head = NULL;
+	queue->tail =NULL;
+
+	// 루트 노드의 값을 큐에 삽입한다
+	enqueue(&(queue->head), &(queue->tail), root);
+
+	// 큐에 값이 없을 때 종료한다.
+	// 큐에 값이 없다는 것은 모든 노드를 탐색했다는 뜻이다.
+	while (queue->head!=NULL)
+	{	
+		// 가장 앞 노드를 뺀다
+		BSTNode* popItem = dequeue(&(queue->head), &(queue->tail));
+
+		printf("%d ", popItem->item);
+
+		// 가장 앞 노드의 왼쪽 노드가 존재한다면 왼쪽 노드를 넣는다.
+		if (popItem->left!=NULL)
+		{
+			enqueue(&(queue->head), &(queue->tail), popItem->left);
+		}
+
+		// 가장 앞 노드의 오른쪽 노드가 존재한다면 오른쪽 노드를 넣는다.
+		if (popItem->right!=NULL)
+		{
+			enqueue(&(queue->head), &(queue->tail), popItem->right);
+		}
+	}
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -127,7 +160,7 @@ void insertBSTNode(BSTNode **node, int value){
 
 //////////////////////////////////////////////////////////////////////////////////
 
-// enqueue node
+// 가장 뒷 노드의 뒤에 새로운 노드를 삽입한다
 void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 {
 	// dynamically allocate memory
@@ -138,14 +171,16 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 		newPtr->data = node;
 		newPtr->nextPtr = NULL;
 
-		// if queue is empty, insert at head
+		// 큐가 비었다면 head에 새로운 노드를 삽입한다
 		if (isEmpty(*headPtr)) {
 			*headPtr = newPtr;
 		}
-		else { // insert at tail
+		// 마지막 노드의 다음 노드에 새로운 노드를 삽입한다
+		else {
 			(*tailPtr)->nextPtr = newPtr;
 		}
 
+		// 마지막 노드를 새로운 노드로 변경한다
 		*tailPtr = newPtr;
 	}
 	else {
@@ -154,15 +189,21 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 }
 
 BSTNode* dequeue(QueueNode **headPtr, QueueNode **tailPtr)
-{
+{	
+	// 가장 앞에 위치한 노드
 	BSTNode *node = (*headPtr)->data;
+
+	// 가장 앞에 위치한 노드를 제거한다
 	QueueNode *tempPtr = *headPtr;
+
+	// 가장 앞에 위치한 노드를 변경한다
 	*headPtr = (*headPtr)->nextPtr;
 
 	if (*headPtr == NULL) {
 		*tailPtr = NULL;
 	}
 
+	// 제거한 가장 앞 노드의 메모리 할당을 해제한다
 	free(tempPtr);
 
 	return node;
