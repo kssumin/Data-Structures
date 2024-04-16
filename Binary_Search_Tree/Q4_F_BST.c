@@ -90,8 +90,59 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 void postOrderIterativeS1(BSTNode *root)
-{
-	 /* add your code here */
+{	
+	BSTNode *temp;
+	int item;
+
+	// 스택을 초기화한다
+	Stack *stack = malloc(sizeof(stack));
+	if (stack == NULL)
+	{
+		return;
+	}
+	stack->top = NULL;
+
+	while (1)
+	{	
+		if (root!=NULL)
+		{
+			push(stack, root);
+			push(stack, root);
+
+			root = root->left;
+		}
+
+		// 루트가 비어있을 때
+		else
+		{
+
+			temp = pop(stack);
+			item = temp->item;
+
+			if (isEmpty(stack))
+			{
+				printf("%d ", item);
+				return ;
+			}
+			// 아직 오른쪽 노드를 탐색하지 않았다.
+			// 오른쪽 아직 탐색하지 않았을 때는 스택에 2개의 값이 들어있다
+			if (item == peek(stack)->item && !isEmpty(stack))
+			{	
+
+				// 오른쪽 노드로 이동한다
+				root = temp->right;
+			}
+
+			// 오른쪽 노드를 탐색했다면 스택에서 pop한 값과 peek한 값이 다르다.
+			// 오른쪽 노드까지 탐색했다.
+			else
+			{
+				printf("%d ", item);
+				root = NULL;
+			}
+		}
+	}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
