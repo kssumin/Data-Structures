@@ -93,6 +93,7 @@ void postOrderIterativeS1(BSTNode *root)
 {	
 	BSTNode *temp;
 	int item;
+	int visited = -1;
 
 	// 스택을 초기화한다
 	Stack *stack = malloc(sizeof(stack));
@@ -102,44 +103,67 @@ void postOrderIterativeS1(BSTNode *root)
 	}
 	stack->top = NULL;
 
-	while (1)
-	{	
-		if (root!=NULL)
-		{
-			push(stack, root);
-			push(stack, root);
 
-			root = root->left;
+	push(stack, root);
+	while(!isEmpty(stack))
+	{	
+		temp = peek(stack);
+
+		// 오른쪽 노드가 존재한다
+		if (temp->right !=NULL)
+		{		
+			// 오른쪽 노드가 이미 방문했다.
+			// 그렇다면 왼쪽 오른쪽 모두 방문했다는 뜻이다.
+			// 따라서 바로 출력한다
+			if (temp -> right->item == visited)
+			{	
+				// 방문처리를 한다
+				temp = pop(stack);
+				visited = temp->item;
+				printf("%d ", temp->item);
+				continue;
+			}
+
+			// 오른쪽 노드가 존재하지만
+			// 방문하지 않은 노드다.
+			// 따라서 해당 노드를 스택에 넣는다.
+			else
+			{	
+				push(stack, temp->right);
+			}
 		}
 
-		// 루트가 비어있을 때
-		else
-		{
-
-			temp = pop(stack);
-			item = temp->item;
-
-			if (isEmpty(stack))
-			{
-				printf("%d ", item);
-				return ;
-			}
-			// 아직 오른쪽 노드를 탐색하지 않았다.
-			// 오른쪽 아직 탐색하지 않았을 때는 스택에 2개의 값이 들어있다
-			if (item == peek(stack)->item && !isEmpty(stack))
+		// 왼쪽 노드가 존재한다.
+		// 왼쪽 노드를 넣는다.
+		if (temp -> left !=NULL)
+		{	
+			// 그렇다면 왼쪽 오른쪽 모두 방문했다는 뜻이다.
+			// 따라서 바로 출력한다
+			if (temp -> left->item == visited)
 			{	
-
-				// 오른쪽 노드로 이동한다
-				root = temp->right;
+				// 방문처리를 한다
+				temp = pop(stack);
+				visited = temp->item;
+				printf("%d ", temp->item);
+				continue;
 			}
 
-			// 오른쪽 노드를 탐색했다면 스택에서 pop한 값과 peek한 값이 다르다.
-			// 오른쪽 노드까지 탐색했다.
+			// 왼쪽 노드가 존재하지만
+			// 방문하지 않은 노드다.
+			// 따라서 해당 노드를 스택에 넣는다.
 			else
-			{
-				printf("%d ", item);
-				root = NULL;
+			{	
+				push(stack, temp->left);
 			}
+		}
+
+		// 왼쪽 오른쪽 모두 존재하지 않을 경우 출력한다.
+		if (temp -> left == NULL && temp -> right == NULL)
+		{
+			// 방문처리를 한다.
+			temp = pop(stack);
+			visited = temp->item;
+			printf("%d ", temp->item);
 		}
 	}
 
